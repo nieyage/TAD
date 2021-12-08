@@ -5,21 +5,25 @@ library(DESeq2)
 library(sva)
 library(dplyr)
 library("RColorBrewer")
-batch <- rep(c(rep("batch1",3),rep("batch2",3)),4)
-treat <- factor(rep(c(rep("WT",3),rep("MS",3)),4))
-group<-factor(c(rep("Day0",6),rep("Day2",6),rep("Day5",6),rep("Day10",6)))
+#####����H1��MS0��ͬ######
 
-colData <- data.frame(row.names=colnames(count),group=group,treat=treat)
+batch <- rep(c(rep("batch1",3),rep("batch2",3)),4)
+#treat <- factor(rep(c(rep("WT",3),rep("MS",3)),4))
+treat <- factor(rep(c(rep("WT",3),rep("MS",3)),4))
+treat[4:6]<-"WT"
+group<-factor(c(rep("Day0",6),rep("Day2",6),rep("Day5",6),rep("Day10",6)))
+count<-read.table("D:/project/TAD/H1_MS_genesymbol_rawcount.txt",header=T)
+colData <- data.frame(row.names=colnames(count),group=group,treat=treat,batch=batch)
 colData
 countData <- count[apply(count,1,sum) > 1 , ] 
 head(countData)
 
-dds<-DESeqDataSetFromMatrix(countData,colData, formula(~group+treat)) 
+dds<-DESeqDataSetFromMatrix(countData,colData, formula(~group+treat+batch)) 
 dds <- estimateSizeFactors(dds)
 normalized_counts <- counts(dds, normalized=TRUE)
 normalized_counts_mad <- apply(normalized_counts, 1, mad)
 normalized_counts <- normalized_counts[order(normalized_counts_mad, decreasing=T), ]
-# log转换后的结果
+# log trans results######
 rld <- rlog(dds, blind=FALSE)
 rlogMat <- assay(rld)
 rlogMat <- rlogMat[order(normalized_counts_mad, decreasing=T), ]
@@ -30,7 +34,7 @@ rlogMat <- rlogMat[order(normalized_counts_mad, decreasing=T), ]
 library(ggplot2)
 vsd <- vst(dds)
 head(vsd)
-pca_data <- plotPCA(vsd, intgroup=c("group","treat"), returnData=T, ntop=5000)
+pca_data <- plotPCA(vsd, intgroup=c("group","treat","batch"), returnData=T, ntop=5000)
 percentVar <- round(100 * attr(pca_data, "percentVar"))
 ggplot(pca_data, aes(PC1, PC2, shape =treat,color=group)) +
   geom_point(size=3) +
@@ -39,12 +43,12 @@ ggplot(pca_data, aes(PC1, PC2, shape =treat,color=group)) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance"))
 
-####
+####remove batch####
 library(limma)
 assay(vsd) <- limma::removeBatchEffect(assay(vsd), c(colData$batch))
-pca <- plotPCA(vsd, intgroup=c("batch"), returnData=T, ntop=5000)
+pca <- plotPCA(vsd, intgroup=c("batch","group","treat"), returnData=T, ntop=5000)
 percentVar <- round(100 * attr(pca, "percentVar"))
-p<-ggplot(pca, aes(PC1, PC2, shape =batch,color=type)) +
+p<-ggplot(pca, aes(PC1, PC2, shape =treat,color=group)) +
   geom_point(size=3) +
   #xlim(-12, 12) +
   #ylim(-10, 10) +
@@ -77,7 +81,7 @@ library(sva)
 batch <- rep(c(rep("1",3),rep("2",3)),4)
 batch
 group<-c(rep("Day0",6),rep("Day2",6),rep("Day5",6),rep("Day10",6))
-mod = model.matrix(~as.factor(batch))  #group为分组信息。此步操作为建模。
+mod = model.matrix(~as.factor(batch))  #group为分组信息。此步操作为建模�?
 mod
 modcombat = model.matrix(~1, data = count)
 modcombat

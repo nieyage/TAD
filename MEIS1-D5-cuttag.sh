@@ -1,3 +1,5 @@
+
+
 ###extract the MEIS1 peak 
 
 findMotifsGenome.pl MEIS1-D5_peaks.tmp hg19 ./ -find ../5_Motif/MEIS1-D5_motifDir_Homer/knownResults/known11.motif > MEIS1-D5_peaks_homer.txt;
@@ -287,3 +289,25 @@ vennplot<-venn.diagram(
 pdf("vennplot.pdf")
 grid.draw(vennplot)
 dev.off()
+
+
+
+
+
+## MACS2 call peak by treat and control 
+
+macs2 callpeak \
+    -t ${bam_out}${samplename}_sorted_rmDup_mapped_rmbl.bam \
+    -f BAMPE -g hs --keep-dup all \
+    -n ${samplename} \
+    --outdir ${peak_out} \
+    &>${peak_out}${samplename}_MACS2Peaks_summary.txt
+
+macs2 callpeak -t ../2_bam/SA_sorted_rmDup_mapped_rmbl.bam \
+               -c ../2_bam/D5-IG_sorted_rmDup_mapped_rmbl.bam  \
+               -f BAMPE \
+               -g hs \
+               -n SA-D2-IG 
+               --outdir /public/home/nieyg/project/TAD/cut_tag/20220826-SALL1-CUTTAG-NO.2/4_MACS2 
+awk '{print $4"\t"$1"\t"$2"\t"$3"\t+"}' ./SA-D2-IG_peaks.narrowPeak > SA-D2-IG_peaks_homer.tmp
+findMotifsGenome.pl SA-D2-IG_peaks_homer.tmp  hg19 SA-D2-IG_motifDir_Homer -len 8,10,12  

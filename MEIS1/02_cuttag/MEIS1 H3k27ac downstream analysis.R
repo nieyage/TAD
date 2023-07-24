@@ -8,11 +8,6 @@ computeMatrix reference-point  --referencePoint TSS  -p 15  \
 plotHeatmap -m MEIS1-H3K27ac-CPM.gz  -out MEIS1-H3K27ac-CPM-heatmap.pdf --plotFileFormat pdf  --dpi 720  
 plotProfile -m MEIS1-H3K27ac-CPM.gz  -out MEIS1-H3K27ac-CPM-profile.pdf --plotFileFormat pdf --perGroup --dpi 720 
 
-
-
-
-
-
 library(DiffBind)
 sampleinfo<-read.csv("/public/home/nieyg/project/TAD/MEIS1/cuttag/20221015-MEIS1-H3K27ac-cuttag/5_analysis/MEIS1_input_sampleinfo.csv")
 MEIS1 <- dba(sampleSheet=sampleinfo)

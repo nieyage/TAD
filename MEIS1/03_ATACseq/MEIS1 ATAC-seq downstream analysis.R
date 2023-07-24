@@ -1,3 +1,9 @@
+conda activate python27
+python /public/home/nieyg/pipeline/ATACseq/pyMakeVplot.py -a H1D5-701-merged_sorted_rmChrM_rmDup.bam -b  /public/home/nieyg/pipeline/ATACseq/hg19_refseq_genes_TSS.bed  -p ends -e 2000 -u -v -o H1D5-701.TSSenrich
+python /public/home/nieyg/pipeline/ATACseq/pyMakeVplot.py -a H1D5-702-merged_sorted_rmChrM_rmDup.bam -b  /public/home/nieyg/pipeline/ATACseq/hg19_refseq_genes_TSS.bed  -p ends -e 2000 -u -v -o H1D5-702.TSSenrich
+python /public/home/nieyg/pipeline/ATACseq/pyMakeVplot.py -a MKO-703-merged_sorted_rmChrM_rmDup.bam -b  /public/home/nieyg/pipeline/ATACseq/hg19_refseq_genes_TSS.bed  -p ends -e 2000 -u -v -o MKO-703.TSSenrich
+python /public/home/nieyg/pipeline/ATACseq/pyMakeVplot.py -a MKO-704-merged_sorted_rmChrM_rmDup.bam -b  /public/home/nieyg/pipeline/ATACseq/hg19_refseq_genes_TSS.bed  -p ends -e 2000 -u -v -o MKO-704.TSSenrich
+
 # MEIS1 ATAC-seq downstream analysis #
 library(DiffBind)
 sampleinfo<-read.csv("/public/home/nieyg/project/TAD/MEIS1/atacseq/7_analysis/DiffBind/MEIS1_input_sampleinfo.csv")

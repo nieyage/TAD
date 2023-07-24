@@ -21,10 +21,38 @@ peakAnno <- annotatePeak("/public/home/nieyg/project/TAD/MEIS1/cuttag/20220608-M
 MEIS1_target<- unique(as.data.frame(peakAnno)$SYMBOL)
 peakAnno <- annotatePeak("/public/home/nieyg/project/TAD/MEIS1/cuttag/PBX-TBX20-CUTTAG/2_bam/TBX20-IG_peaks.narrowPeak",tssRegion=c(-1000, 1000), TxDb=txdb, annoDb="org.Hs.eg.db")
 TBX20_target<- unique(as.data.frame(peakAnno)$SYMBOL)
+pdf("TBX20_target.pdf")
+p1<-plotAnnoPie(peakAnno)
+plotAnnoBar(peakAnno)
+vennpie(peakAnno)
+upsetplot(peakAnno)
+#upsetplot(peakAnno, vennpie=TRUE)
+plotDistToTSS(peakAnno,
+              title="Distribution of TBX20-binding closed loci\nrelative to TSS")
+dev.off()
+
 peakAnno <- annotatePeak("/public/home/nieyg/project/TAD/MEIS1/cuttag/PBX-TBX20-CUTTAG/2_bam/PBX1-IG_peaks.narrowPeak",tssRegion=c(-1000, 1000), TxDb=txdb, annoDb="org.Hs.eg.db")
 PBX1_target<- unique(as.data.frame(peakAnno)$SYMBOL)
+pdf("PBX1_target.pdf")
+p1<-plotAnnoPie(peakAnno)
+plotAnnoBar(peakAnno)
+vennpie(peakAnno)
+upsetplot(peakAnno)
+#upsetplot(peakAnno, vennpie=TRUE)
+plotDistToTSS(peakAnno,
+              title="Distribution of PBX1-binding closed loci\nrelative to TSS")
+dev.off()
 peakAnno <- annotatePeak("/public/home/nieyg/project/TAD/MEIS1/cuttag/PBX-TBX20-CUTTAG/2_bam/PBX3-IG_peaks.narrowPeak",tssRegion=c(-1000, 1000), TxDb=txdb, annoDb="org.Hs.eg.db")
 PBX3_target<- unique(as.data.frame(peakAnno)$SYMBOL)
+pdf("PBX3_target.pdf")
+p1<-plotAnnoPie(peakAnno)
+plotAnnoBar(peakAnno)
+vennpie(peakAnno)
+upsetplot(peakAnno)
+#upsetplot(peakAnno, vennpie=TRUE)
+plotDistToTSS(peakAnno,
+              title="Distribution of PBX1-binding closed loci\nrelative to TSS")
+dev.off()
 
 write.csv(MEIS1_target,"MEIS1_target-gene.csv")
 write.csv(TBX20_target,"TBX20_target-gene.csv")
@@ -99,10 +127,6 @@ write.csv(ego,"MEIS1-cofactor-target-overlap-CC.csv")
 dev.off()
 
 ######KEGG##########
-library(createKEGGdb)
-createKEGGdb::create_kegg_db("hsa")
-install.packages("KEGG.db_1.0.tar.gz", type="source")
-
 ego <- enrichKEGG(
   gene = gene.df$ENTREZID,
   keyType = "kegg",

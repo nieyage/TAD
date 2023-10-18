@@ -72,8 +72,38 @@ python ROSE_geneMapper.py [options] -g [GENOME] -i [INPUT_ENHANCER_FILE]
   -f, --format          If flagged, maintains original formatting of input
                         table(chipseq) 
 
+python /public/home/nieyg/software/ROSE/ROSE_geneMapper.py -g HG19 -i MKac-1_peaks_Gateway_SuperEnhancers.bed 
+
+
 ROSE_bamToGFF.py: calculates density of .bam sequencing reads in .gff regions
 ROSE_callSuper.R: ranks regions by their densities, creates a cutoff to separate super-enhancers from typical enhancers
+
+# foursample profile 
+
+computeMatrix reference-point  --referencePoint TSS  -p 15  \
+-b 1000 -a 1000    \
+-R /public/home/nieyg/pipeline/Chipseq/hg19_RefSeq.bed  \
+-S IgG_CPM_normalized.bw P1_CPM_normalized.bw P3_CPM_normalized.bw T2_CPM_normalized.bw \
+--skipZeros  -o MEIS1-cofactor.gz  \
+--outFileSortedRegions MEIS1-cofactor-bedtools-out.bed
+plotHeatmap -m MEIS1-cofactor.gz  -out MEIS1-cofactor-heatmap.pdf --plotFileFormat pdf  --dpi 720  
+plotProfile -m MEIS1-cofactor.gz  -out MEIS1-cofactor-profile.pdf --plotFileFormat pdf --perGroup --dpi 720 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

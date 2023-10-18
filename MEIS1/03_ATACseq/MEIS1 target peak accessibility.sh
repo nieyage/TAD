@@ -59,18 +59,19 @@ write.csv(TBX20_target,"TBX20_target-gene.csv")
 write.csv(PBX1_target,"PBX1_target-gene.csv")
 write.csv(PBX3_target,"PBX3_target-gene.csv")
 
+
 library(RColorBrewer)
 library(VennDiagram)
 vennplot<-venn.diagram(
-  x = list(na.omit(MEIS1_target),na.omit(PBX1_target),na.omit(PBX3_target),na.omit(TBX20_target)),
-  category.names = c("MEIS1" , "PBX1" ,"PBX3", "TBX20"),
+  x = list(na.omit(MEIS1_target),na.omit(PBX1_target),na.omit(PBX3_target)),
+  category.names = c("MEIS1" , "PBX1" ,"PBX3"),
   filename =NULL,
-  fill = brewer.pal(7, "Set2")[1:4],
+  fill = brewer.pal(7, "Set2")[1:3],
   alpha = 0.50,
   output=TRUE
 )
 
-pdf("4_TF_vennplot.pdf")
+pdf("3_TF_vennplot.pdf")
 grid.draw(vennplot)
 dev.off()
 
@@ -80,7 +81,7 @@ gene<- inter$..values..[[1]]
 library(pheatmap)
 library(clusterProfiler)
 library(org.Hs.eg.db)
-
+write.csv(gene,"3TF_overlap_target_gene.csv")
 gene.df <- bitr(gene, fromType = "SYMBOL",
                 toType = c("ENSEMBL", "ENTREZID"),
                 OrgDb = org.Hs.eg.db)
@@ -131,9 +132,9 @@ ego <- enrichKEGG(
   gene = gene.df$ENTREZID,
   keyType = "kegg",
   organism  = 'hsa',
-  pvalueCutoff  = 0.05,
+  pvalueCutoff  = 0.1,
   pAdjustMethod  = "BH",
-  qvalueCutoff  = 0.05,
+  qvalueCutoff  = 0.1,
   use_internal_data =T)
 pdf("MEIS1-cofactor-target-overlap_KEGG.pdf")
 ego
